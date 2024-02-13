@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-import { PrimeReactProvider } from 'primereact/api';
+import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 
 import Footer from "./components/footer";
-import { Toast } from 'primereact/toast';
+import { Toast } from "primereact/toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,9 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <PrimeReactProvider>
         <body className="h-screen">
-          <div className="max-w-screen-xl mx-auto">
-            {children}
-          </div>
+          <div className="max-w-screen-xl mx-auto">{children}</div>
           <Footer />
         </body>
       </PrimeReactProvider>

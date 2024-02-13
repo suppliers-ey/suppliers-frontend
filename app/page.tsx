@@ -1,22 +1,32 @@
-'use client'
-
-import { Card } from "primereact/card";
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "primereact/button";
-import Footer from "./components/footer";
 import SuppliersTable from "./components/suppliers-table";
-import { Dialog } from "primereact/dialog";
-import { useRef, useState } from "react";
-import Form from "./components/form";
-import { Toast } from "primereact/toast";
+import { logoutFirebase } from "./firebase/providers";
 
 export default function Home() {
+  const router = useRouter();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/auth/login", undefined);
+    }
+  }, []);
 
+  const handleLogout = async () => {
+    logoutFirebase();
+    localStorage.clear();
+    router.push("/auth/login");
+  };
 
   return (
     <>
-      <h1 className="h1 text-center m-10 font-bold text-xl">Suppliers</h1>
-
+      <div className="flex w-full justify-end mt-10">
+        <Button label="Logout" onClick={handleLogout} />
+      </div>
+      <h1 className="h1 text-center  font-bold text-xl">Suppliers</h1>
       <SuppliersTable />
     </>
   );
