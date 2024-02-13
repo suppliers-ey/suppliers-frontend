@@ -21,7 +21,6 @@ export class SuppliersService {
 
     public static async update(supplier: Supplier): Promise<void> {
         await axios.put<Supplier>(`${this.url}/${supplier.id}`, supplier);
-        console.log(supplier);
     }
 
     public static async delete(id: number): Promise<void> {

@@ -8,10 +8,12 @@ export class HighRiskService {
         const response = await axios.get<any[]>(`${this.url}/debarred-firms`);
         return response.data;
     }
-
     public static async getByNameFromWorldBank(name: string): Promise<any[]> {
-        const response = await axios.get<any[]>(`${this.url}/debarred-firms/${name}`);
-        return response.data;
+        const response = await axios.get<HighRiskProps>(`${this.url}/worldbank/${name}`);
+        if (response.data.results) {
+            return response.data.results;
+        }
+        return [];
     }
 
     public static async getByNameFromOffshoreLeaks(name: string): Promise<any[]> {
