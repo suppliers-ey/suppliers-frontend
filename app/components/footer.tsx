@@ -1,7 +1,7 @@
 export default function Footer() {
     return (
-        <footer className="bg-gray-800 text-white p-4 text-center">
-            <p>Footer</p>
+        <footer className=" p-4 text-center">
+            <p>Oliver Tuesta &copy; 2021</p>
         </footer>
     );
 }
