@@ -8,7 +8,6 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 
 import Footer from "./components/footer";
-import { Toast } from "primereact/toast";
 
 const inter = Inter({ subsets: ["latin"] });
 

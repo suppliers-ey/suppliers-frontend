@@ -2,7 +2,8 @@
 import { loginWithEmailPassword } from "../../firebase/providers";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Toast } from "primereact/toast";
+import { useRef, useState } from "react";
 
 export default function Login() {
   const router = useRouter();
@@ -19,8 +20,25 @@ export default function Login() {
     });
   };
 
+
+  const toast = useRef<Toast>(null);
+
+  const validateEmail = (email: string) => {
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      setError("Please enter a valid email address.");
+      return false;
+    }
+    return true;
+  }
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
+    if (!validateEmail(formData.email)) {
+      toast.current?.show({ severity: "error", summary: "Error", detail: "Please enter a valid email address." });
+      return;
+    }
+
     const { email, password } = formData;
 
     try {
@@ -37,8 +55,14 @@ export default function Login() {
         setError(
           response.errorMessage || "An error occurred while logging in.",
         );
+        toast.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: "Please check your email and password.",
+        });
       }
     } catch (error) {
+      toast.current?.show({ severity: "error", summary: "Error", detail: "An error occurred while logging in." });
       console.error("Error logging in:", error);
       setError("An error occurred while logging in.");
     }
@@ -46,6 +70,7 @@ export default function Login() {
 
   return (
     <>
+      <Toast ref={toast} />
       <h1 className="h1 text-center m-10 font-bold text-xl">Login</h1>
       <form
         className="w-[40rem] flex flex-col items-center justify-center mx-auto"

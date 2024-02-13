@@ -2,7 +2,8 @@
 import { registerUserWithEmailPassword } from "../../firebase/providers";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Toast } from "primereact/toast";
+import { useRef, useState } from "react";
 
 export default function Register() {
   const router = useRouter();
@@ -19,8 +20,45 @@ export default function Register() {
     });
   };
 
+  const toast = useRef<Toast>(null);
+
+
+  const validatePassword = (password: string) => {
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long.");
+      return false;
+    }
+    if (!password.match(/[a-z]/)) {
+      setError("Password must contain at least one lowercase letter.");
+      return false;
+    }
+    if (!password.match(/[A-Z]/)) {
+      setError("Password must contain at least one uppercase letter.");
+      return false;
+    }
+    if (!password.match(/[0-9]/)) {
+      setError("Password must contain at least one number.");
+      return false;
+    }
+    return true;
+  }
+
+  const validateEmail = (email: string) => {
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      setError("Please enter a valid email address.");
+      return false;
+    }
+    return true;
+  }
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
+    if (!validatePassword(formData.password) || !validateEmail(formData.email)) {
+      toast.current?.show({ severity: "error", summary: "Error", detail: error });
+      return; 
+    }
+    
     const { email, password } = formData;
 
     try {
@@ -33,17 +71,19 @@ export default function Register() {
         router.push("/auth/login");
       } else {
         setError(
-          response.errorMessage || "An error occurred while logging in.",
+          response.errorMessage || "An error occurred while trying to register."
         );
       }
     } catch (error) {
       console.error("Error registering:", error);
-      setError("An error occurred while logging in.");
+      setError("An error occurred while trying to register.");
     }
   };
 
   return (
     <>
+            <Toast ref={toast} />
+
       <h1 className="h1 text-center m-10 font-bold text-xl">Register</h1>
       <form
         className="w-[40rem] flex flex-col items-center justify-center mx-auto"
