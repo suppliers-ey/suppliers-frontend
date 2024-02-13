@@ -2,7 +2,7 @@ import axios from "axios";
 import { Supplier } from "../models/supplier";
 
 export class SuppliersService {
-    private static readonly url = "http://localhost:5112/api/Suppliers";
+    private static readonly url = "http://191.233.26.17:5112/api/Suppliers";
 
     public static async getAll(): Promise<Supplier[]> {
         const response = await axios.get<Supplier[]>(this.url);
